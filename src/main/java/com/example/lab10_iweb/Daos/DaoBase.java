@@ -14,12 +14,12 @@ import java.sql.SQLException;
                 ex.printStackTrace();
             }
 
-            String URL = "jdbc:mysql://localhost:3306/";
-            String USER = "root";
-            String PASS = "root";
-            String DB = "bi_corp_business";
+            String username = "root";
+            String password = "root";
+            String database = "bi_corp_business";
+            String url = "jdbc:mysql://localhost:3306/" + database;
 
-            return DriverManager.getConnection(URL + DB, USER, PASS);
+            return DriverManager.getConnection(url, username, password);
         }
     }
 

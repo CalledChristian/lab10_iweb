@@ -47,10 +47,8 @@ public class ServletLogin extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("usuarioSession", credentials);
             if (credentials.getTipoUsuario() ==1)
-                /path para menu de administrador/
                     response.sendRedirect(request.getContextPath());
             else
-                /poner path para menu de usuario/
             response.sendRedirect(request.getContextPath());
         }else{
             response.sendRedirect(request.getContextPath() + "/LoginServlet?error");

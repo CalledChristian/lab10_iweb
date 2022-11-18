@@ -42,14 +42,15 @@ public class ServletLogin extends HttpServlet {
         String password = request.getParameter("inputPassword");
 
         Credentials credentials = credentialsDaos.validarUsuarioPassword(username, password);
+        HttpSession session = request.getSession();
 
         if(credentials != null){
-            HttpSession session = request.getSession();
             session.setAttribute("usuarioSession", credentials);
             if (credentials.getTipoUsuario() ==1)
-                    response.sendRedirect(request.getContextPath());
-            else
-            response.sendRedirect(request.getContextPath());
+                response.sendRedirect(request.getContextPath()+"/ServletAdministrador");
+            else{
+                response.sendRedirect(request.getContextPath()+"/ServletCliente");
+            }
         }else{
             response.sendRedirect(request.getContextPath() + "/LoginServlet?error");
         }

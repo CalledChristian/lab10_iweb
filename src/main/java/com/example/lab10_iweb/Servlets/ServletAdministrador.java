@@ -1,26 +1,55 @@
 package com.example.lab10_iweb.Servlets;
 
+import com.example.lab10_iweb.Beans.Cliente;
 import com.example.lab10_iweb.Beans.Credentials;
+import com.example.lab10_iweb.Daos.DaoCliente;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
 
 @WebServlet(name = "ServletAdministrador", value = "/ServletAdministrador")
 public class ServletAdministrador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action") == null ? "formCreateCredentials" : request.getParameter("action");
 
-        RequestDispatcher view;
+        HttpSession session = (HttpSession) request.getSession();
+        Credentials credentialsLogueado = (Credentials) session.getAttribute("usuarioLogueado");
+        if (credentialsLogueado == null) {
+            response.sendRedirect(request.getContextPath());
+        }
+        else {
+            String action = request.getParameter("action");
+            action = (action == null) ? "listar" : action;
+            DaoCliente daoClientes = new DaoCliente();
 
-        switch (action) {
-            case "formCreateCredentials":
+            switch (action) {
+                case "pantallaCliente":
+                    ArrayList<Cliente> listaClientesNoReg =daoClientes.listarClientes();
 
-                view = request.getRequestDispatcher("InicioAdmin.jsp");
-                view.forward(request, response);
+                    ArrayList<Cliente> listaClientes =daoClientes.listarClientes();
 
+                    ArrayList<Credentials> listaClientesRegist = daoClientes.listarCredentials();
+                    for (Cliente cliente : listaClientes) {
+                        int x = 1;
+                        for (Credentials credentials : listaClientesRegist){
+                            if (Objects.equals(cliente.getNumeroDocumento(), credentials.getNumeroDocumento())){
+                                x = 2;
+                            }
+                        }
+                        if (x == 1){
+                            listaClientesNoReg.add(cliente);
+                        }
+                    }
+
+                    request.setAttribute("listaclientesNoReg", listaClientesRegist);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("InicioAdmin.jsp");
+                    requestDispatcher.forward(request,response);
+
+            }
         }
     }
 

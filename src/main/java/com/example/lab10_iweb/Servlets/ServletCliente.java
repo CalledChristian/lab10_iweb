@@ -18,8 +18,7 @@ public class ServletCliente extends HttpServlet {
         Credentials credentialsLogueado = (Credentials) session.getAttribute("usuarioLogueado");
         if (credentialsLogueado == null) {
             response.sendRedirect(request.getContextPath());
-        }
-        else {
+        } else {
 
             String action = request.getParameter("action");
             action = (action == null) ? "listar" : action;
@@ -27,19 +26,21 @@ public class ServletCliente extends HttpServlet {
             DaoCliente daoClientes = new DaoCliente();
             ArrayList<Cliente> list = daoClientes.listarClientes();
 
-            switch (action){
-                case "listar":
-                    request.setAttribute("lista", daoClientes.listarClientes());
-
+            switch (action) {
+                case "misDatos":
+                    String idUsuario = credentialsLogueado.getNumeroDocumento();
+                    request.setAttribute("misdatos", daoClientes.buscarPorId(idUsuario));
                     requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
                     requestDispatcher.forward(request, response);
                 case "crear":
                     requestDispatcher = request.getRequestDispatcher("clientes/formCrear.jsp");
-                    requestDispatcher.forward(request,response);
+                    requestDispatcher.forward(request, response);
 
                 case "listarContratos":
                     ArrayList<Contrato> listacontratos = daoClientes.obtenerlistaContratos(credentialsLogueado.getNumeroDocumento());
                     request.setAttribute("lista", listacontratos);
+                    requestDispatcher = request.getRequestDispatcher("clientes/ContratosCliente.jsp");
+                    requestDispatcher.forward(request, response);
             }
 
         }
@@ -52,7 +53,7 @@ public class ServletCliente extends HttpServlet {
 
         DaoCliente daoCliente = new DaoCliente();
 
-        switch (action){
+        switch (action) {
             case "buscar":
                 String searchText = request.getParameter("searchText");
 
@@ -64,10 +65,7 @@ public class ServletCliente extends HttpServlet {
                 requestDispatcher.forward(request, response);
                 break;
 
-            case "crearCliente":
-                int num_doc = Integer.parseInt(request.getParameter("num_doc"));
-                int password = Integer.parseInt(request.getParameter("password"));
-                daoCliente.
+
         }
     }
 }

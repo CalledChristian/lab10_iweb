@@ -39,10 +39,7 @@ public class DaoCliente extends DaoBase{
 
         Cliente cliente = new Cliente();
 
-        String sql = "SELECT u.codigo, u.nombre, u.apellido, u.correo, u.DNI, u.validaUsuario, u.password, u.nickname, u.celular, r.idRoles, r.nombreRol, catpucp.idCategoriaPUCP, catpucp.nombreCategoria,\n" +
-                "fp.idFotoPerfil, fp.nombreFoto, fp.fotoPerfil \n" +
-                "FROM Usuarios u inner join Roles r on r.idRoles = u.idRoles left join CategoriaPUCP catpucp on catpucp.idCategoriaPUCP = u.idCategoriaPUCP \n" +
-                "left join FotoPerfil fp on u.idFotoPerfil = fp.idFotoPerfil where u.codigo = ?";
+        String sql = "SELECT * from jm_client_bii where jm_client_bii.g4093_nro_id = ?";
 
         try(Connection connection = this.getConnection();
             PreparedStatement pstmt = connection.prepareStatement(sql)){
@@ -164,4 +161,31 @@ public class DaoCliente extends DaoBase{
         return listaContratos;
     }
 
+    public ArrayList<Credentials> listarCredentials(){
+
+        ArrayList<Credentials> listaCredentials = new ArrayList<>();
+        /*String sql = "SELECT concat(g4093_name,' ',coalesce(g4093_last_name,'')) as nombreCliente, g4093_age,g4093_type,g4093_documentType,g4093_nro_id,\n" +
+                "\t   case when g4093_type = \"J\" then \"Juridica\"\n" +
+                "\t\t\twhen g4093_type = \"N\" then \"Normal\"\n" +
+                "            end as tipoCliente\n" +
+                " FROM bi_corp_business.jm_client_bii;"
+
+         */
+
+        String sql = "select nro_documento, tipoUsuario from credentials ";
+        try (Connection connection = this.getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)){
+
+            while (rs.next()){
+                Credentials credentials = new Credentials();
+                credentials.setNumeroDocumento(rs.getString(1));
+                credentials.setTipoUsuario(rs.getInt(2));
+                listaCredentials.add(credentials);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaCredentials;
+    }
 }

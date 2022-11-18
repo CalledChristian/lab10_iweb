@@ -1,6 +1,7 @@
 package com.example.lab10_iweb.Servlets;
 
 import com.example.lab10_iweb.Beans.*;
+import com.example.lab10_iweb.Daos.DaoCliente;
 import com.example.lab10_iweb.Daos.DaoCredentials;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -12,26 +13,43 @@ import java.io.IOException;
 public class ServletLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action") == null ?
-                "loginform" : request.getParameter("action");
+        String action = request.getParameter("action") == null ? "loginform" : request.getParameter("action");
 
         RequestDispatcher view;
 
         switch (action) {
             case "loginform":
-                view = request.getRequestDispatcher("index.jsp");
-                view.forward(request, response);
-                break;
+                Credentials usuario = (Credentials) request.getSession().getAttribute("usuarioSession") ;
+
+                if(usuario != null && usuario.getNumeroDocumento() != null){
+                    if(usuario.getTipoUsuario()==1){
+                        response.sendRedirect(request.getContextPath() + "/ServletAdministrador");
+                    }else{
+                        response.sendRedirect(request.getContextPath() + "/ServletCliente");
+                    }
+                }
+                else {
+                    view = request.getRequestDispatcher("index.jsp");
+                    view.forward(request, response);
+                    break;
+                }
+
+            case "logout":
+                HttpSession session = request.getSession();
+                session.invalidate();
+                response.sendRedirect(request.getContextPath());
         }
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DaoCredentials credentialsDaos = new DaoCredentials();
+        DaoCredentials daoCredentials = new DaoCredentials();
 
-        String username = request.getParameter("inputUsuario");
-        String password = request.getParameter("inputPassword");
+        //liente cliente = new Cliente();
 
-        Credentials credentials = DaoCredentials.validarUsuarioPassword(username, password);
+        String username = request.getParameter("numDocumento");
+        String password = request.getParameter("contrasena");
+
+        Credentials credentials = daoCredentials.buscarUsuario(username, password);
 
         if(credentials != null){
             HttpSession session = request.getSession();
@@ -39,7 +57,7 @@ public class ServletLogin extends HttpServlet {
 
             response.sendRedirect(request.getContextPath());
         }else{
-            response.sendRedirect(request.getContextPath() + "/LoginServlet?error");
+            response.sendRedirect(request.getContextPath() + "/ServletLogin?error");
         }
 
     }

@@ -15,20 +15,19 @@ public class ServletCliente extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        action = (action == null) ? "listar" : action;
-        RequestDispatcher requestDispatcher;
-        DaoCliente daoClientes = new DaoCliente();
-        ArrayList<Cliente> list = daoClientes.listarClientes();
+        action = (action == null) ? "mostrarInicio" : action;
+        RequestDispatcher view;
+        DaoCliente daoCliente = new DaoCliente();
+        //ArrayList<Cliente> list = daoCliente.listarClientes();
 
         switch (action){
-            case "listar":
-                request.setAttribute("lista", daoClientes.listarClientes());
+            case "mostrarInicio":
 
-                requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
-                requestDispatcher.forward(request, response);
-            case "crear":
-                requestDispatcher = request.getRequestDispatcher("clientes/formCrear.jsp");
-                requestDispatcher.forward(request,response);
+                view = request.getRequestDispatcher("InicioCliente.jsp");
+                view.forward(request, response);
+            case "mostrarDatos":
+                view = request.getRequestDispatcher("DatosCliente.jsp");
+                view.forward(request,response);
         }
 
     }
@@ -39,7 +38,7 @@ public class ServletCliente extends HttpServlet {
 
         DaoCliente daoCliente = new DaoCliente();
 
-        switch (action){
+        /*switch (action){
             case "buscar":
                 String searchText = request.getParameter("searchText");
 
@@ -50,6 +49,6 @@ public class ServletCliente extends HttpServlet {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
                 requestDispatcher.forward(request, response);
                 break;
-        }
+        }*/
     }
 }

@@ -7,20 +7,22 @@ import java.sql.SQLException;
 
 public class DaoCredentials extends DaoBase{
 
-    public Credentials validarUsuarioPassword(String username, String password) {
+    public Credentials buscarUsuario(String username, String password) {
 
         Credentials credentials = null;
 
-        String sql = "SELECT * FROM employees_credentials WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM credentials WHERE nro_documento = ? AND hashedPassword = SHA2(?,256) ";
 
         try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
-            try (ResultSet rs = pstmt.executeQuery();) {
+            try (ResultSet rs = pstmt.executeQuery()) {
                 if(rs.next()){
-                    int employeeId = rs.getInt(1);
+                    credentials = new Credentials();
+                    credentials.setNumeroDocumento(username);
+                    credentials.setTipoUsuario(rs.getInt(4));
                 }
             }
 

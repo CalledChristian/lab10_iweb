@@ -82,7 +82,7 @@
                     </div>
                     <p></p>
                     <p></p>
-                    <% if (request.getParameter("error") != null) {%>
+                    <% if (request.getParameter("error") != null) { %>
                     <div class="text-danger mb-2">Datos Erróneos</div>
                     <% } %>
                     <div class="d-grid gap-2 col-3 mx-auto">

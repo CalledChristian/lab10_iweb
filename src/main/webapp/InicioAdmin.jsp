@@ -3,6 +3,8 @@
 <%@ page import="com.example.lab10_iweb.Beans.Cliente" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%ArrayList<Cliente> listaClientes = (ArrayList<Cliente>) request.getAttribute("ListaClientes");%>
+<% String currentPage = request.getParameter("currentPage"); %>
+<jsp:useBean id="usuarioLogueado" type="com.example.lab10_iweb.Beans.Credentials" scope="session" class="com.example.lab10_iweb.Beans.Credentials"/>
 
 <!doctype html>
 <html lang="en">

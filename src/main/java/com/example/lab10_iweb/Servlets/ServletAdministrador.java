@@ -16,23 +16,24 @@ public class ServletAdministrador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        HttpSession session = (HttpSession) request.getSession();
+        HttpSession session = request.getSession();
         Credentials credentialsLogueado = (Credentials) session.getAttribute("usuarioLogueado");
         if (credentialsLogueado == null) {
             response.sendRedirect(request.getContextPath());
         }
         else {
             String action = request.getParameter("action");
-            action = (action == null) ? "pantallaCliente" : action;
-            DaoCliente daoClientes = new DaoCliente();
+            action = (action == null) ? "mostrarForm" : action;
+            DaoCliente daoCliente = new DaoCliente();
+            RequestDispatcher view ;
 
             switch (action) {
-                case "pantallaCliente":
-                    ArrayList<Cliente> listaClientesNoReg =daoClientes.listarClientes();
+                case "mostrarForm":
+                    ArrayList<Cliente> listaClientesNoReg =daoCliente.listarClientes();
 
-                    ArrayList<Cliente> listaClientes =daoClientes.listarClientes();
+                    ArrayList<Cliente> listaClientes =daoCliente.listarClientes();
 
-                    ArrayList<Credentials> listaClientesRegist = daoClientes.listarCredentials();
+                    ArrayList<Credentials> listaClientesRegist = daoCliente.listarCredentials();
                     for (Cliente cliente : listaClientes) {
                         int x = 1;
                         for (Credentials credentials : listaClientesRegist){
@@ -46,8 +47,8 @@ public class ServletAdministrador extends HttpServlet {
                     }
 
                     request.setAttribute("listaclientesNoReg", listaClientesRegist);
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("InicioAdmin.jsp");
-                    requestDispatcher.forward(request,response);
+                    view = request.getRequestDispatcher("InicioAdmin.jsp");
+                    view.forward(request,response);
 
             }
         }

@@ -47,8 +47,9 @@ public class ServletLogin extends HttpServlet {
 
         if(credentials != null){
             session.setAttribute("usuarioLogueado", credentials);
-            if (credentials.getTipoUsuario() ==1)
-                response.sendRedirect(request.getContextPath()+"/ServletAdministrador");
+            if (credentials.getTipoUsuario() ==1) {
+                response.sendRedirect(request.getContextPath() + "/ServletAdministrador");
+            }
             else{
                 response.sendRedirect(request.getContextPath()+"/ServletCliente");
             }

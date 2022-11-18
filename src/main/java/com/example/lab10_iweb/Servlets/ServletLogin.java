@@ -9,7 +9,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "ServletLogin", value = "/ServletLogin")
+@WebServlet(name = "ServletLogin", urlPatterns = {"","/ServletLogin"} )
 public class ServletLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -21,7 +21,8 @@ public class ServletLogin extends HttpServlet {
             case "loginform":
                 Credentials usuario = (Credentials) request.getSession().getAttribute("usuarioSession") ;
 
-                if(usuario != null && usuario.getNumeroDocumento() != null){
+                //&& usuario.getNumeroDocumento() != null
+                if(usuario != null ){
                     if(usuario.getTipoUsuario()==1){
                         response.sendRedirect(request.getContextPath() + "/ServletAdministrador");
                     }else{

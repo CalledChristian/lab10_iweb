@@ -17,9 +17,8 @@ public class ServletAdministrador extends HttpServlet {
 
         switch (action) {
             case "formCreateCredentials":
-                //request.setAttribute("lista", daoClientes.listarClientes());
 
-                view = request.getRequestDispatcher("InicioAdministrador.jsp");
+                view = request.getRequestDispatcher("InicioAdmin.jsp");
                 view.forward(request, response);
 
         }

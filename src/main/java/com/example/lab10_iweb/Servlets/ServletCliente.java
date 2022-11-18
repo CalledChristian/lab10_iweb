@@ -28,6 +28,19 @@ public class ServletCliente extends HttpServlet {
             case "mostrarDatos":
                 view = request.getRequestDispatcher("DatosCliente.jsp");
                 view.forward(request,response);
+
+            case "mostrarContratos":
+                view = request.getRequestDispatcher("ContratosCliente.jsp");
+                view.forward(request,response);
+
+            case "mostrarContratosPorEstado":
+                view = request.getRequestDispatcher("ContratosClientePorEstado.jsp");
+                view.forward(request,response);
+
+            case "mostrarMaxExpectedLoss":
+                view = request.getRequestDispatcher("MaxExpectedLossPorContrato.jsp");
+                view.forward(request,response);
+
         }
 
     }

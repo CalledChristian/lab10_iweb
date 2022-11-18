@@ -21,25 +21,37 @@ public class ServletCliente extends HttpServlet {
         } else {
 
             String action = request.getParameter("action");
-            action = (action == null) ? "listar" : action;
+            action = (action == null) ? "mostrarInicio" : action;
             RequestDispatcher requestDispatcher;
             DaoCliente daoClientes = new DaoCliente();
-            ArrayList<Cliente> list = daoClientes.listarClientes();
+            //ArrayList<Cliente> list = daoClientes.listarClientes();
 
             switch (action) {
+
+                case "mostrarInicio":
+
+                    requestDispatcher = request.getRequestDispatcher("InicioCliente.jsp");
+                    requestDispatcher.forward(request, response);
+
                 case "misDatos":
                     String idUsuario = credentialsLogueado.getNumeroDocumento();
                     request.setAttribute("misdatos", daoClientes.buscarPorId(idUsuario));
-                    requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
-                    requestDispatcher.forward(request, response);
-                case "crear":
-                    requestDispatcher = request.getRequestDispatcher("clientes/formCrear.jsp");
+                    requestDispatcher = request.getRequestDispatcher("DatosCliente.jsp");
                     requestDispatcher.forward(request, response);
 
                 case "listarContratos":
                     ArrayList<Contrato> listacontratos = daoClientes.obtenerlistaContratos(credentialsLogueado.getNumeroDocumento());
                     request.setAttribute("lista", listacontratos);
-                    requestDispatcher = request.getRequestDispatcher("clientes/ContratosCliente.jsp");
+                    requestDispatcher = request.getRequestDispatcher("ContratosCliente.jsp");
+                    requestDispatcher.forward(request, response);
+
+                case "listarContratosPorEstado":
+                    requestDispatcher = request.getRequestDispatcher("ContratosPorEstado.jsp");
+                    requestDispatcher.forward(request, response);
+
+
+                case "mostrarMaxExpectedLoss":
+                    requestDispatcher = request.getRequestDispatcher("MaxExpectedLoss.jsp");
                     requestDispatcher.forward(request, response);
             }
 

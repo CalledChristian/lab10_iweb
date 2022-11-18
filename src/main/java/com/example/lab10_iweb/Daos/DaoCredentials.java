@@ -11,7 +11,7 @@ public class DaoCredentials extends DaoBase{
 
         Credentials credentials = null;
 
-        String sql = "SELECT * FROM credentials WHERE nro_documento = ? AND password = sha2(?,256)";
+        String sql = "SELECT * FROM credentials WHERE nro_documento = ? AND hashedPassword = sha2(?,256)";
 
         try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {

@@ -23,7 +23,7 @@ public class ServletAdministrador extends HttpServlet {
         }
         else {
             String action = request.getParameter("action");
-            action = (action == null) ? "listar" : action;
+            action = (action == null) ? "pantallaCliente" : action;
             DaoCliente daoClientes = new DaoCliente();
 
             switch (action) {

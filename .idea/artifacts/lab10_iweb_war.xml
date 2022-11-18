@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="lab10_iweb:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>lab10_iweb</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="LAB10_IWEB-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="lab10_iweb:war exploded" />
+    </root>
+  </artifact>
+</component>

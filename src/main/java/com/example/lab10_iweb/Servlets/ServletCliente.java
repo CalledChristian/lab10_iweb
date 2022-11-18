@@ -33,19 +33,19 @@ public class ServletCliente extends HttpServlet {
                     requestDispatcher = request.getRequestDispatcher("InicioCliente.jsp");
                     requestDispatcher.forward(request, response);
 
-                case "misDatos":
-                    String idUsuario = credentialsLogueado.getNumeroDocumento();
-                    request.setAttribute("misdatos", daoClientes.buscarPorId(idUsuario));
+                case "mostrarDatos":
+                    String numDocumento = credentialsLogueado.getNumeroDocumento();
+                    request.setAttribute("cliente", daoClientes.buscarCliente(numDocumento));
                     requestDispatcher = request.getRequestDispatcher("DatosCliente.jsp");
                     requestDispatcher.forward(request, response);
 
-                case "listarContratos":
+                case "mostrarContratos":
                     ArrayList<Contrato> listacontratos = daoClientes.obtenerlistaContratos(credentialsLogueado.getNumeroDocumento());
                     request.setAttribute("lista", listacontratos);
                     requestDispatcher = request.getRequestDispatcher("ContratosCliente.jsp");
                     requestDispatcher.forward(request, response);
 
-                case "listarContratosPorEstado":
+                case "mostrarContratosPorEstado":
                     requestDispatcher = request.getRequestDispatcher("ContratosPorEstado.jsp");
                     requestDispatcher.forward(request, response);
 

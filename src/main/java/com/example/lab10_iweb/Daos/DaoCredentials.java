@@ -11,7 +11,7 @@ public class DaoCredentials extends DaoBase{
 
         Credentials credentials = null;
 
-        String sql = "SELECT * FROM employees_credentials WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM credentials WHERE nro_documento = ? AND password = sha2(?,256)";
 
         try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
@@ -20,7 +20,10 @@ public class DaoCredentials extends DaoBase{
 
             try (ResultSet rs = pstmt.executeQuery();) {
                 if(rs.next()){
-                    int employeeId = rs.getInt(1);
+                    credentials = new Credentials();
+                    credentials.setNumeroDocumento(rs.getString(1));
+                    credentials.setTipoUsuario(rs.getInt(2));
+
                 }
             }
 

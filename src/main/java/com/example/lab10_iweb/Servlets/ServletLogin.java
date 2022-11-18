@@ -14,13 +14,23 @@ public class ServletLogin extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action") == null ?
                 "loginform" : request.getParameter("action");
-
+        HttpSession session = request.getSession();
         RequestDispatcher view;
 
-        switch (action) {
-            case "loginform":
-                view = request.getRequestDispatcher("login/InicioSesion.jsp");
-                view.forward(request, response);
+        switch (action){
+            case "login":
+                Credentials credentials = (Credentials) session.getAttribute("usuarioLogueado");
+
+                if(credentials != null){
+                    response.sendRedirect(request.getContextPath());
+                }else{
+                    RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+                    rd.forward(request, response);
+                }
+                break;
+            case "logout":
+                session.invalidate();
+                response.sendRedirect(request.getContextPath());
                 break;
         }
     }
@@ -31,12 +41,16 @@ public class ServletLogin extends HttpServlet {
         String username = request.getParameter("inputUsuario");
         String password = request.getParameter("inputPassword");
 
-        Credentials credentials = DaoCredentials.validarUsuarioPassword(username, password);
+        Credentials credentials = credentialsDaos.validarUsuarioPassword(username, password);
 
         if(credentials != null){
             HttpSession session = request.getSession();
             session.setAttribute("usuarioSession", credentials);
-
+            if (credentials.getTipoUsuario() ==1)
+                /path para menu de administrador/
+                    response.sendRedirect(request.getContextPath());
+            else
+                /poner path para menu de usuario/
             response.sendRedirect(request.getContextPath());
         }else{
             response.sendRedirect(request.getContextPath() + "/LoginServlet?error");

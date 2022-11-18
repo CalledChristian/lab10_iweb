@@ -14,21 +14,34 @@ public class ServletCliente extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-        action = (action == null) ? "listar" : action;
-        RequestDispatcher requestDispatcher;
-        DaoCliente daoClientes = new DaoCliente();
-        ArrayList<Cliente> list = daoClientes.listarClientes();
+        HttpSession session = (HttpSession) request.getSession();
+        Credentials credentialsLogueado = (Credentials) session.getAttribute("usuarioLogueado");
+        if (credentialsLogueado == null) {
+            response.sendRedirect(request.getContextPath());
+        }
+        else {
 
-        switch (action){
-            case "listar":
-                request.setAttribute("lista", daoClientes.listarClientes());
+            String action = request.getParameter("action");
+            action = (action == null) ? "listar" : action;
+            RequestDispatcher requestDispatcher;
+            DaoCliente daoClientes = new DaoCliente();
+            ArrayList<Cliente> list = daoClientes.listarClientes();
 
-                requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
-                requestDispatcher.forward(request, response);
-            case "crear":
-                requestDispatcher = request.getRequestDispatcher("clientes/formCrear.jsp");
-                requestDispatcher.forward(request,response);
+            switch (action){
+                case "listar":
+                    request.setAttribute("lista", daoClientes.listarClientes());
+
+                    requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
+                    requestDispatcher.forward(request, response);
+                case "crear":
+                    requestDispatcher = request.getRequestDispatcher("clientes/formCrear.jsp");
+                    requestDispatcher.forward(request,response);
+
+                case "listarContratos":
+                    ArrayList<Contrato> listacontratos = daoClientes.obtenerlistaContratos(credentialsLogueado.getNumeroDocumento());
+                    request.setAttribute("lista", listacontratos);
+            }
+
         }
 
     }
@@ -43,13 +56,18 @@ public class ServletCliente extends HttpServlet {
             case "buscar":
                 String searchText = request.getParameter("searchText");
 
-                ArrayList<Cliente> lista = daoCliente.buscarPorId(searchText);
-                request.setAttribute("lista", lista);
+                Cliente cliente_encontrado = daoCliente.buscarPorId(searchText);
+                request.setAttribute("cliente", cliente_encontrado);
                 request.setAttribute("searchText", searchText);
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("clientes/lista.jsp");
                 requestDispatcher.forward(request, response);
                 break;
+
+            case "crearCliente":
+                int num_doc = Integer.parseInt(request.getParameter("num_doc"));
+                int password = Integer.parseInt(request.getParameter("password"));
+                daoCliente.
         }
     }
 }
